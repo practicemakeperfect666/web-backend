@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "web-backend"
+version = "0.1.0"
+description = "Web monitor backend for vnpy-domestic: reads monitor.db, serves REST + WebSocket"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.100",
+    "sqlalchemy>=2.0",
+    "uvicorn>=0.20",
+]
+
+[tool.setuptools.packages.find]
+include = ["web_backend*"]
