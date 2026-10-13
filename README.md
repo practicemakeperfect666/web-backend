@@ -31,41 +31,13 @@
                               web-frontend（Vue 3）
 ```
 
-## ✨ 特性
+## ✨ 功能
 
 - 18 个只读 REST 接口：账户 / 持仓 / 订单 / 成交 / 盈亏 / 策略 / 净值 / K 线 / 日志 / 系统指标 / 合约
 - WebSocket `/ws` 每 3 秒增量推送（id 游标，只推新行）
 - 双账户感知（`real` / `simnow`），通过 `account` 查询参数过滤
 - SQLite WAL 模式 + `busy_timeout`，与写进程安全并发
-- demo 数据生成器，无实盘账户也能本地联调
-
-## 📦 环境要求
-
-- Python ≥ 3.10
-
-## 🚀 安装
-
-```bash
-cd web-backend
-pip install -e .
-```
-
-## ▶️ 运行
-
-```bash
-# 指向交易进程写的 monitor.db
-export MONITOR_DB_PATH="/path/to/monitor.db"
-
-python -m uvicorn web_backend.main:app --host 127.0.0.1 --port 8000
-```
-
-交互式 API 文档：http://127.0.0.1:8000/docs
-
-### 造 demo 数据（无需实盘账户）
-
-```bash
-python -m web_backend.seed_demo /path/to/monitor.db
-```
+- 内置 demo 数据生成器（`seed_demo.py`），无实盘账户也能本地联调
 
 ## 📡 API 概览
 
@@ -108,6 +80,10 @@ web-backend/
 ```
 
 > `models.py` 是表结构读侧副本，须与 `vnpy-domestic/vnpy_domestic/monitor/models.py`（写侧）保持同步；本服务不 import vnpy-domestic。
+
+## 🚀 安装与使用
+
+安装依赖、指向 `monitor.db` 启动服务、demo 造数、生产部署等完整步骤见 vnpy-domestic 主仓库的 [vnpy-domestic-web端监控使用手册.md](https://github.com/practicemakeperfect666/vnpy-domestic/blob/main/vnpy-domestic-web%E7%AB%AF%E7%9B%91%E6%8E%A7%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md)。
 
 ## 🔒 安全说明
 

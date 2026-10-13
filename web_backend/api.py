@@ -619,13 +619,13 @@ def equity(
             )
         return result
 
-    # 账户净值 = 权益 balance（日频/日内聚合）
+    # 账户净值 = 动态权益 balance + 浮动盈亏（日频/日内聚合）
     stmt = select(Account).order_by(Account.id)
     if account:
         stmt = stmt.where(Account.account == account)
     rows = db.scalars(stmt).all()
     return [
-        {"trading_day": key, "account": r.account, "equity": r.balance}
+        {"trading_day": key, "account": r.account, "equity": r.balance + (r.pnl or 0.0)}
         for key, r in _aggregate_account(rows, freq)
     ]
 

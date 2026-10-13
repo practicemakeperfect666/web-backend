@@ -99,7 +99,23 @@ def build_snapshot() -> dict:
         sys_row = db.scalar(
             select(SystemMetric).order_by(SystemMetric.id.desc()).limit(1)
         )
+        # Account intraday P&L = latest snapshot per account
+        intraday_maxid = (
+            select(
+                AccountIntradayPnl.account,
+                func.max(AccountIntradayPnl.id).label("max_id"),
+            )
+            .group_by(AccountIntradayPnl.account)
+            .subquery()
+        )
+        intraday_rows = db.scalars(
+            select(AccountIntradayPnl).join(
+                intraday_maxid,
+                AccountIntradayPnl.id == intraday_maxid.c.max_id,
+            )
+        ).all()
     realized = {(a, s): (p or 0.0) for a, s, p in realized_rows}
+    intraday_pnl = [_to_dict(r) for r in intraday_rows]
     account_realized = {a: (t or 0.0) for a, t in account_realized_rows}
 
     def with_pnl(d):
@@ -121,6 +137,7 @@ def build_snapshot() -> dict:
             "accounts": [with_account_realized(d) for d in _state["accounts"].values()],
             "positions": positions,
             "strategies": [with_pnl(d) for d in _state["strategies"].values()],
+            "intraday_pnl": intraday_pnl,
             "system": _to_dict(sys_row) if sys_row else None,
         },
     }

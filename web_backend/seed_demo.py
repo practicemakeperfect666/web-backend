@@ -166,7 +166,7 @@ def seed() -> None:
                     traded=pos,
                     status="ALLTRADED",
                     submit_time=now,
-                    delay_ms=5,
+                    queue_delay_ms=5,
                 )
             )
             session.add(
@@ -180,7 +180,6 @@ def seed() -> None:
                     price=3100 + i * 50,
                     volume=pos,
                     slippage=1,
-                    delay_ms=5,
                     trade_time=now,
                 )
             )
