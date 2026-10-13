@@ -11,6 +11,7 @@ dependencies = [
     "fastapi>=0.100",
     "sqlalchemy>=2.0",
     "uvicorn>=0.20",
+    "websockets>=10.4",
 ]
 
 [tool.setuptools.packages.find]
